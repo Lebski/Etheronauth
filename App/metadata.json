@@ -1,0 +1,8 @@
+{
+   "files":{
+      "contract":"../contracts/auth.sol"
+   },
+   "parameter":{
+      "version":"0.2"
+   }
+}

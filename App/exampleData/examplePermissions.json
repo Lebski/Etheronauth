@@ -1,0 +1,15 @@
+{
+   "header":{
+      "typ":"JWT"
+   },
+   "payload":{
+     "iss":"0.2",
+     "sub":"0x93794c6778F1C64b0f7CFBE1A7271c1749D8707d",
+     "aud":"0.2",
+     "exp":"0x93794c6778F1C64b0f7CFBE1A7271c1749D8707d",
+     "nbf":"0.2",
+     "iat":"0x93794c6778F1C64b0f7CFBE1A7271c1749D8707d",
+     "jti":"0.2"
+   },
+   "signature": ""
+}

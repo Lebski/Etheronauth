@@ -38,7 +38,7 @@ contract TestPermissionRequest {
     function addRequest (Authority authContract, bytes32 _permissionId) private {
         bytes32 _alg = "RS512";
         bytes32 _typ = "JWT";
-        bytes32 _iss = "Tester";
+        address _iss = "Tester";
         uint _sub = 1234567890;
         uint _audience = 1234567890;
         uint _exp = 1516239023;
@@ -56,13 +56,14 @@ contract TestPermissionRequest {
         uint audience =getRequestAud(_permissionId);
         uint exp = getRequestExp(_permissionId);
         uint nbf = getRequestNbf(_permissionId);
-        uint iat = getRequestIat(_permissionId);
-        uint jti = getRequestJti(_permissionId);*/
+        uint iat = getRequestIat(_permissionId);*/
+        uint jti = getRequestJti(_permissionId);
 
         //"Stack to deep"
         //(alg, typ, iss, sub, audience, exp, nbf, iat, jti) = authContract.getRequest(_permissionId);
 
         Assert.equal(alg, "RS512", "Alg ist not correctly set");
+        Assert.equal(jti, "0", "Alg ist not correctly set");
     }
 
 }

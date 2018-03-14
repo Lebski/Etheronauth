@@ -1,8 +1,1 @@
-{
-   "files":{
-      "contract":"../contracts/auth.sol"
-   },
-   "parameter":{
-      "version":"0.2"
-   }
-}
+{"files": {"contract": "../contracts/auth.sol"}, "parameter": {"version": "0.2", "address": "0x93794c6778F1C64b0f7CFBE1A7271c1749D8707d"}}

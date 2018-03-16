@@ -1,7 +1,5 @@
 import json
 import web3
-import code
-import inspect
 
 from web3 import Web3, HTTPProvider, TestRPCProvider
 from solc import compile_source
@@ -33,12 +31,11 @@ def make_request(contract_interface, _contract_address):
     print(trybytes)
     deployed_Contract.functions.addPermissionRequest(tryhash, trybytes, trybytes, web3.eth.coinbase , 4, 4, 4, 4, 4).transact({'from': web3.eth.coinbase})
     transfer_filter = deployed_Contract.eventFilter('PermissionRequestdeployed')#, {'filter': {'_from': '0xdc3a9db694bcdd55ebae4a89b22ac6d12b3f0c24'}})
-    print(transfer_filter.get_new_entries())
-    [alg, typ, iss, sub, audience, exp, nbf, iat, jti, signature] = deployed_Contract.call(
-        {'from': web3.eth.coinbase}).permissionList(tryhash)
-    # IN CASE OF HEX: print ('Erg: ', Web3.toHex(getHash[0].encode('latin-1')))
+    print(transfer_filter.get_all_entries())
+    [alg, typ, iss, sub, audience, exp, nbf, iat, jti, signature] = deployed_Contract.functions.permissionList(tryhash).call(
+        {'from': web3.eth.coinbase})
 
-    print('Erg: ', alg, typ, iss, sub, audience, exp, nbf, iat, jti, signature)
+    print('Erg: \n Algo:{}\n Typ:{}\n Issue:{}\n Subject:{}\n Audience:{}\n Expiration:{}\n NotBefore:{}\n Issued at:{}\n Nonce:{}\n Signature:{}\n'.format(Web3.toText(alg), Web3.toText(typ), iss, sub, audience, exp, nbf, iat, jti, Web3.toText(signature)))
 
 
 setup_Web3()

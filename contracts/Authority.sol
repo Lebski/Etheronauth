@@ -25,9 +25,16 @@ contract Authority {
     uint private jtiCounter;
     mapping (address => Levelobj) public permissions;
     mapping (bytes32 => Permissionrequest) public permissionList;
+    mapping (address => uint) public verifiers;
 
     event PermissionRequestdeployed (bytes32 permissionId);
     event PermissionGranted (bytes32 permissionId);
+
+    // TODO: Change to 1 for release
+    modifier validVerifiers(address _verifier) {
+        require(verifiers[_verifier] == 0);
+        _;
+    }
 
     modifier restricted() {
         if (msg.sender == owner) _;
@@ -54,12 +61,13 @@ contract Authority {
         PermissionRequestdeployed(_permissionId);
     }
 
-    function addPermissionRequest () public {
-        jtiCounter = 0;
+    function storeSignature(bytes32 _permissionId, bytes _signature) public validVerifiers(msg.sender) {
+        permissionList[_permissionId].signature = _signature;
     }
 
     /*
-    * DOESNT WORK BECAUSE "Stack is too deep"
+    * DOESNT WORK BECAUSE "Stack is too deep". Reuse this if future decisions
+    * are made to reduce the var count
     function getRequest(bytes32 _permissionId) public view returns(
         bytes32 alg, bytes32 typ, bytes32 iss, uint sub, uint audience, uint exp, uint nbf, uint iat, uint jti) {
         Permissionrequest storage request = permissionList[_permissionId];

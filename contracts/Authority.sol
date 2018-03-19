@@ -11,6 +11,7 @@ contract Authority {
         bytes32 alg;
         bytes32 typ;
         address iss;
+        address verifier;
         uint sub;
         uint audience;
         uint exp;
@@ -50,19 +51,19 @@ contract Authority {
         bytes32 _permissionId,
         bytes32 _alg,
         bytes32 _typ,
-        address _iss,
         uint _sub,
         uint _audience,
         uint _exp,
         uint _nbf,
         uint _iat) public {
         permissionList[_permissionId] = Permissionrequest(
-        _alg, _typ, _iss, _sub, _audience, _exp, _nbf, _iat, jtiCounter++, "0");
+        _alg, _typ, msg.sender, 0x0, _sub, _audience, _exp, _nbf, _iat, jtiCounter++, "0");
         PermissionRequestdeployed(_permissionId);
     }
 
     function storeSignature(bytes32 _permissionId, bytes _signature) public validVerifiers(msg.sender) {
         permissionList[_permissionId].signature = _signature;
+        permissionList[_permissionId].verifier = msg.sender;
     }
 
     /*
@@ -115,4 +116,7 @@ contract Authority {
         return permissionList[_permissionId].signature;
     }
 
+    function getRequestVerifier(bytes32 _permissionId) public view returns(address) {
+        return permissionList[_permissionId].verifier;
+    }
 }

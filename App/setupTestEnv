@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export PYTHONPATH=$PYTHONPATH:/home/lebx/Documents/Uni/Masterarbeit/Prototyp_eth/App/etheronauth/
+export PYTHONPATH=$PYTHONPATH:$PWD./etheronauth/
+echo $PYTHONPATH
 testrpc &
 sleep 1s
 echo

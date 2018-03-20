@@ -13,4 +13,4 @@ print (output)
 permission_id = Web3.toBytes(hexstr=output)
 
 storeOnBlockchain.store_signature(permission_id, '0xaba')
-storeOnBlockchain.read_request(permission_id)
+print(storeOnBlockchain.read_request(permission_id))

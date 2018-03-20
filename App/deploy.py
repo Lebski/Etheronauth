@@ -29,6 +29,7 @@ def deploy_contract(contract_interface):
     contract = web3.eth.contract(abi=contract_interface['abi'], bytecode=contract_interface['bin'])
     #implement time calculation
     tx_hash = contract.deploy(args=[], transaction={'from': web3.eth.accounts[0], 'gas': 3000000})
+    #tx_hash = contract.constructor(args=[], transaction={'from': web3.eth.accounts[0], 'gas': 3000000}).transact()
     tx_receipt = web3.eth.getTransactionReceipt(tx_hash)
     contract_address = tx_receipt['contractAddress']
     print("Contract with address {} deployed".format(contract_address))

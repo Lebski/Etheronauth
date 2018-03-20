@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+export PYTHONPATH=$PYTHONPATH:/home/lebx/Documents/Uni/Masterarbeit/Prototyp_eth/App/etheronauth/
+testrpc &
+sleep 1s
+echo
+echo
+echo -ne 'Wait 3 sec for deployment\r'
+sleep 1s
+echo -ne 'Wait 2 sec for deployment\r'
+sleep 1s
+echo -ne 'Wait 1 sec for deployment\r'
+sleep 1s
+echo 'Starting deployment'
+python3 deploy.py

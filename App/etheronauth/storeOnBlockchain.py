@@ -44,7 +44,7 @@ def read_request(permission_id):
     [alg, typ, iss, verifier,sub, audience, exp, nbf, iat, jti, signature] = deployed_Contract.functions.permissionList(permission_id).call(
         {'from': web3.eth.coinbase})
 
-    print('Load JWT-Token from Blockchain: \n Algo:{}\n Typ:{}\n Issue:{}\n Verifier:{}\n Subject:{}\n Audience:{}\n Expiration:{}\n NotBefore:{}\n Issued at:{}\n Nonce:{}\n Signature:{}\n'.format(Web3.toText(alg), Web3.toText(typ), iss, verifier,sub, audience, exp, nbf, iat, jti, Web3.toText(signature)))
+    print('Load JSON-Token from Blockchain: \n Algo:{}\n Typ:{}\n Issue:{}\n Verifier:{}\n Subject:{}\n Audience:{}\n Expiration:{}\n NotBefore:{}\n Issued at:{}\n Nonce:{}\n Signature:{}\n'.format(Web3.toText(alg), Web3.toText(typ), iss, verifier,sub, audience, exp, nbf, iat, jti, Web3.toText(signature)))
 
     #### Sorry, web3 don't remove the padding    ####
     #### ... so doing it manually                ####
@@ -75,8 +75,8 @@ def read_request(permission_id):
        "signature": signature
     }
     #### Returns Token of type 'dict'            ####
-    json_token = json.dumps(token)
-    return json_token
+    #json_token = json.dumps(token)
+    return token
 
 def store_signature(permission_id, signature):
 

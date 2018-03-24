@@ -29,8 +29,13 @@ def handle_input(request_json):
 @app.route('/readToken', methods=['GET', 'POST'])
 def read_token(permission_id=None):
     permission_id = request.data.decode('utf-8')
-#    response = flask.jsonify(storeOnBlockchain.read_request(permission_id))
-    response = storeOnBlockchain.read_request(permission_id)
+    token = storeOnBlockchain.read_request(permission_id)
+
+    #turning dict into flask-specific json-object
+    #response = flask.jsonify(token)
+
+    #turning dict into string
+    response = json.dumps(token)
     return response
 
 if __name__ == '__main__':

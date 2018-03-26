@@ -1,5 +1,6 @@
 import json
 import flask
+import requests
 
 from flask import Flask, request, jsonify
 from etheronauth import storeOnBlockchain
@@ -10,6 +11,8 @@ app = Flask(__name__)
 def make_Request():
     if request.method == 'POST':
         permission_id = handle_input(request.get_json(force=True))
+        RequestUrl = 'http://127.0.0.1:4777/validateToken'
+        requests.post(RequestUrl, data=permission_id)
         return permission_id.hex()
 
     else:

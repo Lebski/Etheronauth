@@ -8,6 +8,7 @@ def setup_Web3():
     global web3
     web3 = Web3(HTTPProvider('http://localhost:8545'))
     #errorhandling!
+    print("Module storeOnBlockchain:")
     print("sucessfully set up Web3 Env to Account: ", web3.eth.accounts[0])
 
 

@@ -16,7 +16,6 @@ permission_id = Web3.toBytes(hexstr=output)
 response = storeOnBlockchain.read_request(permission_id)
 #print("JSON-Token stored on Blockchain:\n", response)
 
-print (type(response))
 
 JWT = generator.encode_Data(response["payload"]).decode('utf-8')
 print("This is the JWT:\n", JWT)

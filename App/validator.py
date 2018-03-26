@@ -1,48 +1,36 @@
 import json
 import flask
 
+#from web3 import Web3
 from flask import Flask, request, jsonify
 from etheronauth import generator
+from etheronauth import storeOnBlockchain
 
 app = Flask(__name__)
 
 # JSON -> SIG
-@app.route('/signToken', methods=['GET', 'POST'])
-def make_Request():
+@app.route('/validateToken', methods=['GET', 'POST'])
+def validateToken():
     if request.method == 'POST':
-        unsigned_Token = handle_input(request.get_json(force=True))
-        
-        return permission_id.hex()
-
-
+        permission_id_text = request.data
+        verify(permission_id_text)
+        return True
     else:
         raise ValueError('You must use a POST-Request')
 
-# JSON -> JWT
-@app.route('/createJWT', methods=['GET', 'POST'])
-def make_Request():
-
-# JWT -> JSON
-@app.route('/retrieveToken', methods=['GET', 'POST'])
-def retrieve_Token():
-
-
-def handle_input(request_json):
-    sub = request_json['payload']['sub']
-    exp = request_json['payload']['sub']
-    nbf = request_json['payload']['sub']
-    iat = request_json['payload']['sub']
-    audience = request_json['payload']['sub']
-    permission_id = storeOnBlockchain.make_request(sub=sub, audience=audience, exp=exp, nbf=nbf, iat=iat)
-    #store_token(permission_id.hex())
-    return permission_id
-
-@app.route('/readToken', methods=['GET', 'POST'])
-def read_token(permission_id=None):
-    permission_id = request.data.decode('utf-8')
-#    response = flask.jsonify(storeOnBlockchain.read_request(permission_id))
+def verify(permission_id):
+    #permission_id = Web3.toBytes(hexstr=permission_id_text)
+    #get JSON Token from Blockchain
     response = storeOnBlockchain.read_request(permission_id)
-    return response
+    #Generate JWT from JSON
+    JWT = generator.encode_Data(response["payload"]).decode('utf-8')
+    #Take the last Part of the Token
+    signature = JWT.split('.')[2]
+    #Sign the JSON-Token on the Blockchain
+    storeOnBlockchain.store_signature(permission_id, signature)
+    print ("stored")
+
+
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=4090)
+    app.run(debug=True, host='127.0.0.1', port=4777)

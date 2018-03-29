@@ -15,7 +15,7 @@ permission_id = response.text
 print(response.status_code)
 print(response.text)
 
-time.sleep(5)
+#time.sleep(5)
 
 RequestUrl = 'http://127.0.0.1:5000/readToken'
 read_response = requests.get(RequestUrl, data= permission_id).json()

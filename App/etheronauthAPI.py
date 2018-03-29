@@ -1,9 +1,11 @@
 import json
 import flask
 import requests
+from web3 import Web3
 
 from flask import Flask, request, jsonify
 from etheronauth import storeOnBlockchain
+from etheronauth import generator
 
 app = Flask(__name__)
 
@@ -31,13 +33,22 @@ def handle_input(request_json):
 
 @app.route('/readToken', methods=['GET', 'POST'])
 def read_token(permission_id=None):
-    permission_id = request.data.decode('utf-8')
-    token = storeOnBlockchain.read_request(permission_id)
+    permission_id = request.data.decode('latin')
+    permission_id_bytes = Web3.toBytes(hexstr=permission_id)
+    token = storeOnBlockchain.read_request(permission_id_bytes)
 
     #turning dict into flask-specific json-object
     #response = flask.jsonify(token)
 
-    #turning dict into string
+
+
+    #JWT = generator.encode_Data(token["payload"]).decode('utf-8')
+    #JWT1 = JWT.split('.')[0:1]
+    #JWT2 = JWT.split('.')[1:2]
+    #new = JWT1[0] + "." + JWT2[0] + "." + str(token["signature"])
+    #print (JWT1)
+    #print (new)
+        #turning dict into string
     response = json.dumps(token)
     return response
 

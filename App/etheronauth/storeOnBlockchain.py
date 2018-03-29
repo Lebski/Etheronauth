@@ -42,6 +42,7 @@ def make_request(sub=0, audience=0, exp=0, nbf=0, iat=0):
 
 def read_request(permission_id):
     print("Reading Contract at contract at > {}\n".format(deployed_Contract.address))
+    print ((permission_id))
     [alg, typ, iss, verifier,sub, audience, exp, nbf, iat, jti, signature] = deployed_Contract.functions.permissionList(permission_id).call(
         {'from': web3.eth.coinbase})
 

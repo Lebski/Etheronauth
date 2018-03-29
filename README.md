@@ -2,8 +2,6 @@
 
 ![IMG of Setup](https://github.com/Lebski/Etheronauth/blob/master/OAuth%20Eth2.jpg)
 
-# Project Title
-
 This project is part of my master-thesis about authorization of microservices on blockchains. 
 
 ## Getting Started

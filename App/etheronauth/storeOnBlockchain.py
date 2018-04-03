@@ -85,6 +85,9 @@ def store_signature(permission_id, signature):
     signature_bytes = Web3.toBytes(text=signature)
     deployed_Contract.functions.storeSignature(permission_id, signature_bytes).transact({'from': web3.eth.coinbase})
 
+def get_coinbase():
+    return web3.eth.coinbase
+
 ### INITAL SETUP ###
 setup_Web3()
 data = get_Ressources('metadata.json')

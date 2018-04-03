@@ -1,1 +1,1 @@
-{"files": {"contract": "../contracts/Authority.sol"}, "parameter": {"address": "0x8202552029C4D159F165C8b1ffb00b0DD2939727", "version": "0.2"}}
+{"parameter": {"version": "0.2", "address": "0x56106c63c79981F5De1fA54D6d4829EC8Cd2591e"}, "files": {"contract": "../contracts/Authority.sol"}}

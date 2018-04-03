@@ -39,15 +39,6 @@ def read_token(permission_id=None):
 
     #turning dict into flask-specific json-object
     #response = flask.jsonify(token)
-
-
-
-    #JWT = generator.encode_Data(token["payload"]).decode('utf-8')
-    #JWT1 = JWT.split('.')[0:1]
-    #JWT2 = JWT.split('.')[1:2]
-    #new = JWT1[0] + "." + JWT2[0] + "." + str(token["signature"])
-    #print (JWT1)
-    #print (new)
         #turning dict into string
     response = json.dumps(token)
     return response

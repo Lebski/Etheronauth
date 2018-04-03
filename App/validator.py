@@ -23,12 +23,12 @@ def verify(permission_id):
     #get JSON Token from Blockchain
     response = storeOnBlockchain.read_request(permission_id)
     #Generate JWT from JSON
+    response["payload"]["verifier"] = storeOnBlockchain.get_coinbase()
     JWT = generator.encode_Data(response["payload"]).decode('utf-8')
     print(JWT)
-    #Take the last Part of the Token
-    signature = JWT.split('.')[2]
+    #Take tho whole token because order matters
     #Sign the JSON-Token on the Blockchain
-    storeOnBlockchain.store_signature(permission_id, signature)
+    storeOnBlockchain.store_signature(permission_id, JWT)
     print ("stored")
 
 

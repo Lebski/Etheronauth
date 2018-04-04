@@ -11,6 +11,8 @@ def setup_Web3():
     global web3
     web3 = Web3(HTTPProvider('http://localhost:8545'))
     print("sucessfully set up Web3 Env to Account: ", web3.eth.accounts[0])
+    is_unlocked = web3.personal.unlockAccount(web3.eth.accounts[0], "password", 15000)
+    print("Sucessfully unlocked?" + str(is_unlocked))
 
 def get_Ressources(filename):
     data = json.load(open(filename))
@@ -27,10 +29,9 @@ def deploy_contract(contract_interface):
     if not contract_interface:
         print ("Please specify contract-abi and bytecode")
     contract = web3.eth.contract(abi=contract_interface['abi'], bytecode=contract_interface['bin'])
-    #implement time calculation
-    tx_hash = contract.deploy(args=[], transaction={'from': web3.eth.accounts[0], 'gas': 3000000})
-    #tx_hash = contract.constructor(args=[], transaction={'from': web3.eth.accounts[0], 'gas': 3000000}).transact()
-    tx_receipt = web3.eth.getTransactionReceipt(tx_hash)
+    #tx_hash = contract.deploy(args=[], transaction={'from': web3.eth.accounts[0]})
+    deploy_txn = contract.constructor().transact(transaction={'from': web3.eth.accounts[0]})
+    tx_receipt = web3.eth.getTransactionReceipt(deploy_txn)
     contract_address = tx_receipt['contractAddress']
     print("Contract with address {} deployed".format(contract_address))
     return contract_address

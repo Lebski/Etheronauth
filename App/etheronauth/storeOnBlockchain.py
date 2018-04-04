@@ -32,7 +32,10 @@ def make_request(sub=0, audience=0, exp=0, nbf=0, iat=0):
     alg = Web3.toBytes(text="RS256")
     typ = Web3.toBytes(text="JWT")
 
-    deployed_Contract.functions.addPermissionRequest(permission_id, alg, typ, sub, audience, exp, nbf, iat).transact({'from': web3.eth.coinbase})
+    txn_hash = deployed_Contract.functions.addPermissionRequest(permission_id, alg, typ, sub, audience, exp, nbf, iat).transact({'from': web3.eth.coinbase})
+
+    print("txn_hash")
+    print(web3.eth.getTransactionReceipt(txn_hash))
 
     [alg, typ, iss, verifier,sub, audience, exp, nbf, iat, jti, signature] = deployed_Contract.functions.permissionList(permission_id).call(
         {'from': web3.eth.coinbase})

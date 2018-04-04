@@ -18,9 +18,9 @@ def make_request(contract_interface, _contract_address):
     deployed_Contract = web3.eth.contract(
         abi=contract_interface['abi'], address=_contract_address)
     print("Using Contract at contract at > {}\n".format(_contract_address))
-    event_filter = deployed_Contract.eventFilter('PermissionRequestdeployed')
+    event_filter = deployed_Contract.events.PermissionRequestdeployed.createFilter(fromBlock=1, toBlock='latest')
     while True:
-        for event in event_filter.get_new_entries():
+        for event in event_filter.get_all_entries():
             handle_event(event)
         time.sleep(2)
         print("nothing else found")

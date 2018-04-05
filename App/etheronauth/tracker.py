@@ -28,7 +28,8 @@ def make_request(contract_interface, _contract_address):
 def handle_event(event):
     print(event)
 
-
+### Inital setup
+print(">> Using module tracker")
 setup_Web3()
 #Load address
 data = getRessources('metadata.json')

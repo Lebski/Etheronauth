@@ -30,6 +30,11 @@ print("Decrypts to {}".format(output))
 #From now on don't use the cryptography package
 
 # Testing write/read files
-secure.write_bytes_to_file("munckintime", "testing/testPassword", b"5uP3R53CR37P55wRD")
-data = secure.read_bytes_from_file("munckintime", "testing/testPassword")
+secure.write_bytes_to_file("munckintime", "testing/output/testPassword.txt", b"5uP3R53CR37P55wRD")
+data = secure.read_bytes_from_file("munckintime", "testing/output/testPassword.txt")
 print("Passwordfile contains: {}".format(data))
+
+example_json = json.loads('["foo", {"bar":["baz", null, 1.0, 2]}]')
+secure.write_json_to_file("munckintime", "testing/output/testJson.txt", example_json)
+data = secure.read_json_from_file("munckintime", "testing/output/testJson.txt")
+print("Json in File is: {}".format(data))

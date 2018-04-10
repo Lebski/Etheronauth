@@ -1,5 +1,6 @@
 import base64
 import os
+import json
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
@@ -43,4 +44,13 @@ def write_bytes_to_file(pw_string, filepath, data):
     out_file.write(enc_file)
     out_file.close()
 
-#def read_json_from_file():
+def read_json_from_file(pw_string, filepath):
+    data = read_bytes_from_file(pw_string, filepath)
+    data_string = data.decode()
+    json_obj = json.loads(data_string)
+    return json_obj
+
+def write_json_to_file(pw_string, filepath, data):
+    string = json.dumps(data)
+    byte_string = string.encode()
+    write_bytes_to_file(pw_string, filepath, byte_string)

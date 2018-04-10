@@ -24,7 +24,7 @@ contract Authority {
     address public owner;
     uint public lastCompletedMmigration;
     uint private jtiCounter;
-    mapping (address => Levelobj) public permissions;
+    mapping (address => mapping (bytes32 => uint)) public permissions; //addr zeigt auf ein obj, obj zeigt auf perm
     mapping (bytes32 => Permissionrequest) public permissionList;
     mapping (address => uint) public verifiers;
 

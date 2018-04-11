@@ -22,18 +22,17 @@ contract Authority {
     }
 
     address public owner;
-    uint public lastCompletedMmigration;
     uint private jtiCounter;
     mapping (address => mapping (bytes32 => uint)) public permissions; //addr zeigt auf ein obj, obj zeigt auf perm
     mapping (bytes32 => Permissionrequest) public permissionList;
-    mapping (address => uint) public verifiers;
+    mapping (address => bool) public verifiers;
 
     event PermissionRequestdeployed (bytes32 permissionId);
     event PermissionGranted (bytes32 permissionId);
 
     // TODO: Change to 1 for release
     modifier validVerifiers(address _verifier) {
-        require(verifiers[_verifier] == 0);
+        require(verifiers[_verifier] == false);
         _;
     }
 
@@ -47,7 +46,6 @@ contract Authority {
     }
 
     function addPermissionRequest (
-        //sender ID
         bytes32 _permissionId,
         bytes32 _alg,
         bytes32 _typ,
@@ -64,6 +62,11 @@ contract Authority {
     function storeSignature(bytes32 _permissionId, bytes _signature) public validVerifiers(msg.sender) {
         permissionList[_permissionId].signature = _signature;
         permissionList[_permissionId].verifier = msg.sender;
+        PermissionGranted(_permissionId);
+    }
+
+    function setPermission(address _user, bytes32 _dataObject, uint _permissionLevel) public restricted {
+        permissions[_user][_dataObject] = _permissionLevel;
     }
 
     /*

@@ -2,7 +2,6 @@ import json
 import web3
 
 from web3 import Web3, HTTPProvider, TestRPCProvider
-from solc import compile_source
 
 def setup_Web3():
     global web3

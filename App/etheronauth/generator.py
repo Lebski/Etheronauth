@@ -1,8 +1,6 @@
 import json
 import jwt
 
-from collections import OrderedDict
-
 def get_Ressources(filename):
     data = json.load(open(filename))
     return data
@@ -27,16 +25,16 @@ if __name__ == '__main__':
     public_key = get_Key(keys, "public_key")
 
     #Load Permissionsfile, get header and payload
-    permissions = get_Ressources("exampleData/examplePermissions.json")
+    permissions = get_Ressources("testing/testPermissions.json")
     header = permissions["header"]
     payload = permissions["payload"]
     data = {'header': header, "payload": payload}
 
     #Encode Data
-    encoded_Data = encode_Data(data, private_key)
+    encoded_Data = encode_Data(data)
 
     #Decode Data
-    decoded_Data = decode_Data(encoded_Data, public_key)
+    decoded_Data = decode_Data(encoded_Data)
 
     print (decoded_Data)
     print (encoded_Data)

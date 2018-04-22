@@ -1,7 +1,5 @@
 import json
 import web3
-import code
-import inspect
 
 from web3 import Web3, HTTPProvider, TestRPCProvider
 from solc import compile_source
@@ -13,7 +11,12 @@ def setup_Web3():
     web3 = Web3(HTTPProvider('http://localhost:8545'))
     print("sucessfully set up Web3 Env to Account: ", w3.eth.accounts[0])
     is_unlocked = w3.personal.unlockAccount(w3.eth.accounts[0], "password", 15000)
-    print("Sucessfully unlocked?" + str(is_unlocked))
+    print("Sucessfully unlocked? {}".format(is_unlocked))
+
+    print("Still in syncing? {}".format(w3.eth.syncing))
+    print("Account in use: {}".format(w3.eth.accounts[0]))
+    print("Latest Block: {}".format(w3.eth.getBlock("latest").number))
+    print("Balance of Account in use: {}".format(w3.eth.getBalance(w3.eth.accounts[0])))
 
 def get_Ressources(filename):
     data = json.load(open(filename))
@@ -32,12 +35,9 @@ def deploy_contract(contract_interface):
     contract = w3.eth.contract(abi=contract_interface['abi'], bytecode=contract_interface['bin'])
     #tx_hash = contract.deploy(args=[], transaction={'from': w3.eth.accounts[0]})
     abs_cost = w3.eth.gasPrice * contract.constructor().estimateGas()
-    print(abs_cost)
-    print(w3.eth.syncing)
-    print(w3.eth.accounts[0])
-    print(w3.eth.getBlock("latest").number)
-    print(w3.eth.getBalance('0xdd34B44d8B80EB9C6f878Fc7F7689920B0935CBA'))
-    print((w3.eth.getBalance('0xdd34B44d8B80EB9C6f878Fc7F7689920B0935CBA'))<abs_cost)
+    print("Absolute cost for this transaction: {}".format(abs_cost))
+
+    #print((w3.eth.getBalance('0xdd34B44d8B80EB9C6f878Fc7F7689920B0935CBA'))<abs_cost)
     deploy_txn = contract.constructor().transact(transaction={'from': w3.eth.accounts[0]})
     tx_receipt = w3.eth.getTransactionReceipt(deploy_txn)
     contract_address = tx_receipt['contractAddress']

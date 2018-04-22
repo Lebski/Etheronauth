@@ -1,1 +1,1 @@
-{"files": {"contract": "../contracts/Authority.sol"}, "parameter": {"version": "0.2", "address": "0xF2eB9d9632Bb59E007e4636eb88bed1Feb65665e", "coinbase": "0xdd34B44d8B80EB9C6f878Fc7F7689920B0935CBA"}}
+{"files": {"contract": "../contracts/Authority.sol"}, "parameter": {"version": "0.2", "coinbase": "0xdd34B44d8B80EB9C6f878Fc7F7689920B0935CBA", "address": "0x0c56942203ecAB0671b349bf737947db51d44E6F"}}

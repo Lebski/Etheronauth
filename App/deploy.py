@@ -10,7 +10,7 @@ def setup_Web3():
     global web3
     web3 = Web3(HTTPProvider('http://localhost:8545'))
     print("sucessfully set up Web3 Env to Account: ", w3.eth.accounts[0])
-    is_unlocked = w3.personal.unlockAccount(w3.eth.accounts[0], "password", 15000)
+    is_unlocked = w3.personal.unlockAccount(w3.eth.accounts[0], "TestTestTest", 15000)
     print("Sucessfully unlocked? {}".format(is_unlocked))
 
     print("Still in syncing? {}".format(w3.eth.syncing))
@@ -38,7 +38,10 @@ def deploy_contract(contract_interface):
     print("Absolute cost for this transaction: {}".format(abs_cost))
 
     #print((w3.eth.getBalance('0xdd34B44d8B80EB9C6f878Fc7F7689920B0935CBA'))<abs_cost)
-    deploy_txn = contract.constructor().transact(transaction={'from': w3.eth.accounts[0]})
+    owner = w3.eth.accounts[0]
+    print (owner)
+    deploy_txn = contract.constructor().transact(transaction={'from': owner})
+    print (deploy_txn)
     tx_receipt = w3.eth.getTransactionReceipt(deploy_txn)
     contract_address = tx_receipt['contractAddress']
     print("Contract with address {} deployed".format(contract_address))

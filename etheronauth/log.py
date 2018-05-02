@@ -6,8 +6,8 @@ out.setLevel(logging.DEBUG)
 
 # create console handler and set level to debug
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-#ch.setLevel(logging.INFO)
+#ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 #ch.setLevel(logging.WARN)
 
 # create formatter

@@ -13,10 +13,10 @@ def import_contract():
     contract_address = tools.get_file("contract_address.txt")
     contract_interface = tools.get_json("contract_interface.json")
     authority_contract = w3.eth.contract(abi=contract_interface['abi'], address=contract_address)
-    log.out.debug("Imported contract: {}".format(authority_contract.address))
+    log.out.debug("chainhandler: \"Imported contract: {}\"".format(authority_contract.address))
     return authority_contract
 
-def submit_request(account, sub=0, audience=0, exp=0, nbf=0, iat=0):
+def submit_request(account, sub=0, audience=0, exp=0, nbf=0, iat=0, wait=False):
     log.out.debug("submit_request: \"Using contract at {}\"".format(authority_contract.address))
     # cast numbers to int if they get delivered as json/string
     sub = int(sub)
@@ -46,15 +46,16 @@ def submit_request(account, sub=0, audience=0, exp=0, nbf=0, iat=0):
     txn_hash = authority_contract.functions.addPermissionRequest(request_id, alg, typ, sub, audience, exp, nbf, iat).transact({'from': account})
 
     # wait for tx_receipt, could be disabled
-    timer = 50
-    tx_receipt = None
-    log.out.info("Transaction sent, waiting for mining: max. {} seconds".format(timer))
-    while (tx_receipt is None and timer > 0):
-        tx_receipt = w3.eth.getTransactionReceipt(txn_hash)
-        time.sleep(1)
-        timer -= 1
-    if tx_receipt is not None:
-        log.out.info("\033[92mTransaction with request id {} mined!\033[0m".format(request_id))
+    if (wait):
+        timer = 50
+        tx_receipt = None
+        log.out.info("Transaction sent, waiting for mining: max. {} seconds".format(timer))
+        while (tx_receipt is None and timer > 0):
+            tx_receipt = w3.eth.getTransactionReceipt(txn_hash)
+            time.sleep(1)
+            timer -= 1
+        if tx_receipt is not None:
+            log.out.info("\033[92mTransaction with request id {} mined!\033[0m".format(request_id))
 
 
     return request_id
@@ -98,9 +99,24 @@ def request_token(account, request_id):
        "signature": signature
     }
 
-    token_json = json.dumps(token_dict)
-    log.out.debug("Token in json-format: {}".format(token_json))
-    return token_json
+    #token_json = json.dumps(token_dict)
+    log.out.debug("Token in dict-format: {}".format(token_dict))
+    return token_dict
+
+def store_signature(account, request_id, signature, wait=False):
+    signature_bytes = w3.toBytes(text=signature)
+    txn_hash = authority_contract.functions.storeSignature(request_id, signature_bytes).transact({'from': account})
+
+    if (wait):
+        timer = 50
+        tx_receipt = None
+        log.out.info("Transaction sent, waiting for mining: max. {} seconds".format(timer))
+        while (tx_receipt is None and timer > 0):
+            tx_receipt = w3.eth.getTransactionReceipt(txn_hash)
+            time.sleep(1)
+            timer -= 1
+        if tx_receipt is not None:
+            log.out.info("\033[92mSignature with request id {} mined!\033[0m".format(request_id))
 
 
 

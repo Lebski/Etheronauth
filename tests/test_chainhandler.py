@@ -14,9 +14,15 @@ from etheronauth import web3login
 #     o contract_interface.json
 
 log.out.info("### Testing on module > chainhandler <")
+
 log.out.info("# Checking import_contract")
 contract = chainhandler.import_contract()
 log.out.info("Imported contract: {}".format(contract.address))
+
 log.out.info("# Checking submit_request")
-account = web3login.web3_login()
-chainhandler.submit_request(account)
+account = web3login.web3_silent_login("0x4F6b4c67eEE111497Ef2b85FC1d133D3Ca3FD51B", "TestTestTest")
+request_id = chainhandler.submit_request(account)
+log.out.info("Request_id: {}".format(request_id))
+
+log.out.info("# Checking request_token")
+token = chainhandler.request_token(account, request_id)

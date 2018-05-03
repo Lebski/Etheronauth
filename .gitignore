@@ -1,6 +1,5 @@
-metadata.json
-interface.json
-__pycache__/*
-__init__.py
+etheronauth/__pycache__
 etheronauth/globalvars.py
+resources/contract_address.txt
+resources/contract_interface.json
 tests/results

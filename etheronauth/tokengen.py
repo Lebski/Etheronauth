@@ -39,7 +39,10 @@ def encode_jwt(data):
     log.out.debug("Encoded JWT is: {} ...".format(enc_jwt[0:20]))
     return enc_jwt
 
+public_key = get_public_key("TestTestTest")
+private_key = get_private_key("TestTestTest")
 
+'''
 is_unlocked = False
 attempts_left = 3
 while (is_unlocked is False and (attempts_left > 0)):
@@ -76,3 +79,4 @@ while (is_unlocked is False and (attempts_left > 0)):
             log.out.warning("\033[91mNo attepts left.\033[0m".format(attempts_left))
             log.out.warning("\033[91mExiting...\033[0m".format(attempts_left))
             exit()
+'''

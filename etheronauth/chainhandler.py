@@ -38,6 +38,7 @@ def submit_request(account, sub=0, audience=0, exp=0, nbf=0, iat=0, wait=False):
 
     # casting those filthy bytes to an human-readable hexstr
     request_id = w3.toHex(request_id_bytes)
+    request_id = request_id[0:20]
     # Proof that this works
     #log.out.debug(w3.toBytes(hexstr=request_id))
     #log.out.debug(request_id_bytes)

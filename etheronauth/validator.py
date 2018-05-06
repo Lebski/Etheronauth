@@ -16,7 +16,8 @@ def start_listening():
             request_id = w3.toHex(request_id_bytes)
             log.out.debug("Event found {}".format(event["args"]["permissionId"]))
             verify(request_id)
-    time.wait(3)
+        time.sleep(3)
+
 
 def verify(request_id):
     request = chainhandler.request_token(account, request_id)
@@ -29,11 +30,7 @@ def verify(request_id):
 
 
 
-try:
-    authority_contract = chainhandler.authority_contract
-    account = web3login.web3_silent_login("0x4F6b4c67eEE111497Ef2b85FC1d133D3Ca3FD51B", "TestTestTest")
-    start_listening()
-except KeyboardInterrupt as e:
-    log.out.warning("\033[91mShutting down by user. Logging out.\033[0m")
-    web3login.web3_logout()
-    exit()
+
+authority_contract = chainhandler.authority_contract
+account = web3login.web3_silent_login("0x4F6b4c67eEE111497Ef2b85FC1d133D3Ca3FD51B", "TestTestTest")
+start_listening()

@@ -4,11 +4,10 @@ import flask
 from flask import Flask, request, jsonify
 from etheronauth import chainhandler
 from etheronauth import web3login
-from etheronauth import tokengen
 
 app = Flask(__name__)
 
-@app.route('/token/request', methods=['POST'])
+@app.route('/token/request/', methods=['POST'])
 def create_request():
     permission_id = handle_raw_input(request.get_json(force=True))
     pending_url = "/token/request/" + str(permission_id)
@@ -18,7 +17,7 @@ def create_request():
 @app.route('/token/request/<string:permission_id>', methods=['GET'])
 def check_request(permission_id):
     token = chainhandler.request_token(account, permission_id)
-    jwt = token["signature"]
+    jwt = token["token"]
     pending_url = "/token/request/" + str(permission_id)
     job = {"job": {"@uri" : pending_url,  "id" : str(permission_id), "status": "PENDING"}, "token": "NULL"}
     if jwt != "0":
@@ -32,12 +31,12 @@ def check_request(permission_id):
 
 
 def handle_raw_input(json_payload):
-    sub = json_payload['payload']['sub']
-    exp = json_payload['payload']['sub']
-    nbf = json_payload['payload']['sub']
-    iat = json_payload['payload']['sub']
-    audience = json_payload['payload']['sub']
-    permission_id = chainhandler.submit_request(account, sub=sub, audience=audience, exp=exp, nbf=nbf, iat=iat)
+    aud = json_payload['payload']['aud']
+    #exp = json_payload['payload']['exp']
+    #nbf = json_payload['payload']['nbf']
+    #iat = json_payload['payload']['iat']
+    #sub = json_payload['payload']['sub']
+    permission_id = chainhandler.submit_request(account, aud=aud)
     return permission_id
 
 if __name__ == '__main__':

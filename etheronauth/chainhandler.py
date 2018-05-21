@@ -16,22 +16,17 @@ def import_contract():
     log.out.debug("chainhandler: \"Imported contract: {}\"".format(authority_contract.address))
     return authority_contract
 
-def submit_request(account, sub=0, audience=0, exp=0, nbf=0, iat=0, wait=False):
+def submit_request(account, sub=0, aud=0, exp=0, nbf=0, iat=0, wait=False):
     log.out.debug("submit_request: \"Using contract at {}\"".format(authority_contract.address))
-    # cast numbers to int if they get delivered as json/string
-    sub = int(sub)
-    exp = int(exp)
-    nbf = int(nbf)
-    iat = int(iat)
-    audience = int(audience)
 
     # setting header
     alg = w3.toBytes(text="RS256")
     typ = w3.toBytes(text="JWT")
+    aud = w3.toBytes(text=aud)
 
     # hashing request id
     try:
-        request_id_bytes = w3.soliditySha3(['address', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256'], [account, sub, audience, exp, nbf, iat])
+        request_id_bytes = w3.soliditySha3(['address', 'bytes32'], [account, aud])
     except web3.exceptions.InvalidAddress as e:
         log.out.warning("\033[91mPlease make sure your address has a valid EIP cheksum. Test on etherscan.io and correct in ressources/user_info.json\033[0m")
         exit()
@@ -44,7 +39,7 @@ def submit_request(account, sub=0, audience=0, exp=0, nbf=0, iat=0, wait=False):
     #log.out.debug(request_id_bytes)
 
     # submit to blockchain
-    txn_hash = authority_contract.functions.addPermissionRequest(request_id, alg, typ, sub, audience, exp, nbf, iat).transact({'from': account})
+    txn_hash = authority_contract.functions.addPermissionRequest(request_id, alg, typ, aud).transact({'from': account})
 
     # wait for tx_receipt, could be disabled
     if (wait):
@@ -69,18 +64,20 @@ def request_token(account, request_id):
     request_id_bytes = w3.toBytes(hexstr=request_id)
 
     # Call contract
-    alg, typ, iss, verifier,sub, audience, exp, nbf, iat, jti, signature = authority_contract.functions.permissionList(request_id_bytes).call({'from': account})
+    alg, typ, iss, sub, aud, iat, nbf, exp, jti, auth_token = authority_contract.functions.permissionList(request_id_bytes).call({'from': account})
 
 
     # Sorry, web3 don't remove the padding so doing it manually
     typ = typ.split(b'\0',1)[0]
     alg = alg.split(b'\0',1)[0]
-    signature = signature.split(b'\0',1)[0]
+    aud = aud.split(b'\0',1)[0]
+    auth_token = auth_token.split(b'\0',1)[0]
 
     #### Byte-String to text
     typ = w3.toText(typ)
     alg = w3.toText(alg)
-    signature = w3.toText(signature)
+    aud = w3.toText(aud)
+    auth_token = w3.toText(auth_token)
 
     token_dict = {
        "header":{
@@ -90,23 +87,25 @@ def request_token(account, request_id):
        "payload":{
          "iss": iss,
          "sub": sub,
-         "verifier": verifier,
-         "aud": audience,
+         "aud": aud,
          "exp": exp,
          "nbf": nbf,
          "iat": iat,
          "jti": jti,
        },
-       "signature": signature
+       "token": auth_token
     }
 
     #token_json = json.dumps(token_dict)
     log.out.debug("Token in dict-format: {}".format(token_dict))
     return token_dict
 
-def store_signature(account, request_id, signature, wait=False):
-    signature_bytes = w3.toBytes(text=signature)
-    txn_hash = authority_contract.functions.storeSignature(request_id, signature_bytes).transact({'from': account})
+def store_token(account, request_id, auth_token, exp, nbf, iat, wait=False):
+    token_bytes = w3.toBytes(text=auth_token)
+    exp = int(exp)
+    nbf = int(nbf)
+    iat = int(iat)
+    txn_hash = authority_contract.functions.storeToken(request_id, token_bytes, exp, nbf, iat).transact({'from': account})
 
     if (wait):
         timer = 50
@@ -117,7 +116,7 @@ def store_signature(account, request_id, signature, wait=False):
             time.sleep(1)
             timer -= 1
         if tx_receipt is not None:
-            log.out.info("\033[92mSignature with request id {} mined!\033[0m".format(request_id))
+            log.out.info("\033[92mToken with request id {} mined!\033[0m".format(request_id))
 
 
 

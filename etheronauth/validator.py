@@ -22,10 +22,19 @@ def start_listening():
 def verify(request_id):
     request = chainhandler.request_token(account, request_id)
     #Fill in verifier address
-    request["payload"]["verifier"] = account
+    request["payload"]["iss"] = account
+
+    time_current = time.time()
+    time_nbf = time_current + 12
+    time_exp = time_current + 60 * 10
+
+    request["payload"]["iat"] = time_current
+    request["payload"]["nbf"] = time_nbf
+    request["payload"]["exp"] = time_exp
+
     jwt = tokengen.encode_jwt(request["payload"]).decode('utf-8')
     log.out.debug("JWT generated: {}".format(jwt))
-    chainhandler.store_signature(account, request_id, jwt, wait=False)
+    chainhandler.store_token(account, request_id, jwt, time_current, time_nbf, time_exp, wait=False)
 
 
 

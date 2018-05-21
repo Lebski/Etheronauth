@@ -11,14 +11,13 @@ contract Authority {
         bytes32 alg;
         bytes32 typ;
         address iss;
-        address verifier;
-        uint sub;
-        uint audience;
-        uint exp;
-        uint nbf;
+        address sub;
+        bytes32 aud;
         uint iat;
+        uint nbf;
+        uint exp;
         uint jti;
-        bytes signature;
+        bytes token;
     }
 
     address public owner;
@@ -49,19 +48,23 @@ contract Authority {
         bytes32 _permissionId,
         bytes32 _alg,
         bytes32 _typ,
-        uint _sub,
-        uint _audience,
-        uint _exp,
-        uint _nbf,
-        uint _iat) public {
+        bytes32 _aud) public {
         permissionList[_permissionId] = Permissionrequest(
-        _alg, _typ, msg.sender, 0x0, _sub, _audience, _exp, _nbf, _iat, jtiCounter++, "0");
+        _alg, _typ, 0x0, msg.sender, _aud, 0, 0, 0, jtiCounter++, "0");
         PermissionRequestDeployed(_permissionId);
     }
 
-    function storeSignature(bytes32 _permissionId, bytes _signature) public validVerifiers(msg.sender) {
-        permissionList[_permissionId].signature = _signature;
-        permissionList[_permissionId].verifier = msg.sender;
+    function storeToken(
+        bytes32 _permissionId,
+        bytes _token,
+        uint _exp,
+        uint _nbf,
+        uint _iat) public validVerifiers(msg.sender) {
+        permissionList[_permissionId].token = _token;
+        permissionList[_permissionId].iss = msg.sender;
+        permissionList[_permissionId].iat = _iat;
+        permissionList[_permissionId].nbf = _nbf;
+        permissionList[_permissionId].exp = _exp;
         PermissionGranted(_permissionId);
     }
 
@@ -91,12 +94,12 @@ contract Authority {
         return permissionList[_permissionId].iss;
     }
 
-    function getRequestSub(bytes32 _permissionId) public view returns(uint) {
+    function getRequestSub(bytes32 _permissionId) public view returns(address) {
         return permissionList[_permissionId].sub;
     }
 
-    function getRequestAud(bytes32 _permissionId) public view returns(uint) {
-        return permissionList[_permissionId].audience;
+    function getRequestAud(bytes32 _permissionId) public view returns(bytes32) {
+        return permissionList[_permissionId].aud;
     }
 
     function getRequestExp(bytes32 _permissionId) public view returns(uint) {
@@ -115,11 +118,7 @@ contract Authority {
         return permissionList[_permissionId].jti;
     }
 
-    function getRequestSignature(bytes32 _permissionId) public view returns(bytes) {
-        return permissionList[_permissionId].signature;
-    }
-
-    function getRequestVerifier(bytes32 _permissionId) public view returns(address) {
-        return permissionList[_permissionId].verifier;
+    function getRequestToken(bytes32 _permissionId) public view returns(bytes) {
+        return permissionList[_permissionId].token;
     }
 }
